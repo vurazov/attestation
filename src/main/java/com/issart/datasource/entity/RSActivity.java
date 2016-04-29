@@ -1,0 +1,146 @@
+package com.issart.datasource.entity;
+
+import com.issart.datasource.dao.RSActivityDaoImpl;
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.joda.time.DateTime;
+import java.io.Serializable;
+/**
+ *
+ * Class represent RsUser attributes
+ */
+@DatabaseTable(daoClass = RSActivityDaoImpl.class)
+public class RSActivity extends  BaseEntity {
+    /*
+create table rs_activity (
+  activity_id serial
+ ,activity_date date not null
+ ,activity_user_id integer not null
+ ,activity_type_id integer not null
+
+ ,activity_loyalty_score integer
+ ,activity_expirience_score integer
+ ,activity_communication_score integer
+ ,activity_created_by_user_id integer not null
+ ,activity_approved_by_user_id integer
+
+ ,constraint rs_activity_pk primary key (activity_id)
+ ,constraint rs_activity_user_fk foreign key (activity_user_id)
+    references rs_user(user_id)
+ ,constraint rs_activity_creator_fk foreign key (activity_created_by_user_id)
+    references rs_user(user_id)
+ ,constraint rs_activity_approver_fk foreign key (activity_approved_by_user_id)
+    references rs_user(user_id)
+ ,constraint rs_activity_scores_ck check (activity_loyalty_score is not null or activity_expirience_score is not null or activity_communication_score is not null)
+);
+   * */
+    @DatabaseField(generatedId = true)
+    int activityId;
+
+    public DateTime getActivityDate() {
+        return activityDate;
+    }
+
+    public void setActivityDate(DateTime activityDate) {
+        this.activityDate = activityDate;
+    }
+
+    public RsUser getRsActivityUser() {
+        return rsActivityUser;
+    }
+
+    public void setRsActivityUser(RsUser rsActivityUser) {
+        this.rsActivityUser = rsActivityUser;
+    }
+
+    public RsUser getRsCreatedByUser() {
+        return rsCreatedByUser;
+    }
+
+    public void setRsCreatedByUser(RsUser rsCreatedByUser) {
+        this.rsCreatedByUser = rsCreatedByUser;
+    }
+
+    public RsUser getRsApprovedByUser() {
+        return rsApprovedByUser;
+    }
+
+    public void setRsApprovedByUser(RsUser rsApprovedByUser) {
+        this.rsApprovedByUser = rsApprovedByUser;
+    }
+
+    public RSActivityType getRsActivityType() {
+        return rsActivityType;
+    }
+
+    public void setRsActivityType(RSActivityType rsActivityType) {
+        this.rsActivityType = rsActivityType;
+    }
+
+    public Integer getActivityTypeLoyaltyScore() {
+        return activityTypeLoyaltyScore;
+    }
+
+    public void setActivityTypeLoyaltyScore(Integer activityTypeLoyaltyScore) {
+        this.activityTypeLoyaltyScore = activityTypeLoyaltyScore;
+    }
+
+    public Integer getActivityTypeExpirienceScore() {
+        return activityTypeExpirienceScore;
+    }
+
+    public void setActivityTypeExpirienceScore(Integer activityTypeExpirienceScore) {
+        this.activityTypeExpirienceScore = activityTypeExpirienceScore;
+    }
+
+    public Integer getActivityTypeCommunicationScore() {
+        return activityTypeCommunicationScore;
+    }
+
+    public void setActivityTypeCommunicationScore(Integer activityTypeCommunicationScore) {
+        this.activityTypeCommunicationScore = activityTypeCommunicationScore;
+    }
+
+    @DatabaseField(dataType = DataType.DATE_TIME, canBeNull = false)
+    DateTime activityDate;
+
+    @DatabaseField(foreignColumnName = "id", foreign = true, canBeNull = true)
+    RsUser rsActivityUser;
+
+    @DatabaseField(foreignColumnName = "id", foreign = true, canBeNull = true)
+    RsUser rsCreatedByUser;
+
+    @DatabaseField(foreignColumnName = "id", foreign = true, canBeNull = true)
+    RsUser rsApprovedByUser;
+
+    @DatabaseField(foreignColumnName = "id", foreign = true, canBeNull = true)
+    RSActivityType rsActivityType;
+
+    @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
+    Integer activityTypeLoyaltyScore;
+
+    @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
+    Integer activityTypeExpirienceScore;
+
+    @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
+    Integer activityTypeCommunicationScore;
+
+    @Override
+    public int getId() {
+        return activityId;
+    }
+
+    public void setId(int id) {
+        this.activityId = activityId;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+}
