@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+      <Property name="log-path">logs</Property>
+    </Properties>
+    <ThresholdFilter level="trace"/>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{ISO8601} %-5p [%60.60c]  %M [%t] %m %ex%n"/>
+        </Console>
+        <Console name="console-fast" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{ISO8601} %-5p [%60.60c]  [%t] %m%n"/>
+        </Console>
+        <RollingFile name="trace" fileName="${log-path}/trace.log"
+                     filePattern="${log-path}/trace-%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>%d{ISO8601} %-5p [%60.60c]  %M [%t] %m %ex%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="error" fileName="${log-path}/error.log"
+                     filePattern="${log-path}/vertigo-error-%d{yyyy-MM-dd}.log">
+            <PatternLayout>
+                <pattern>%d{ISO8601} %-5p [%60.60c]  %M [%t] %m %ex%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info" additivity="false">
+            <!--AppenderRef ref="console"/-->
+            <AppenderRef ref="trace"/>
+        </Root>
+        <Logger name="com.issart" level="trace" additivity="false">
+            <appender-ref ref="trace" level="trace"/>
+            <appender-ref ref="error" level="error"/>
+            <appender-ref ref="console" level="trace"/>
+        </Logger>
+    </Loggers>
+</Configuration>
