@@ -2,7 +2,7 @@ package com.issart.service;
 
 import java.util.Optional;
 import com.google.common.base.Strings;
-import com.issart.datasource.entity.RSUserBuilder;
+import com.issart.datasource.entity.RsUserBuilder;
 import com.issart.datasource.entity.RsUser;
 import com.issart.exception.DataSourceException;
 import com.issart.exception.DuplicateUserException;
@@ -41,7 +41,7 @@ public class UserService extends AbstractService {
         } else {
             throw new InvalidCredentialsException("Username and/or password are incorrect.");
         }
-        final Optional<RsUser> user = dataSource.getIRSUserDAO().createUser(RSUserBuilder.create()
+        final Optional<RsUser> user = dataSource.getIRSUserDAO().createUser(RsUserBuilder.create()
             .userId(-1)
             .userName(userName)
             .userPasswordHash(password.getPassword())

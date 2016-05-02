@@ -1,19 +1,16 @@
 package com.issart.service;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Optional;
 import com.issart.datasource.entity.RsUser;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.Optional;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 /**
  * Created by vurazov on 29.04.2016.
  */

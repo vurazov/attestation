@@ -14,7 +14,9 @@ import java.sql.SQLException;
 public class DataSource {
 
     private ConnectionSource connectionSource;
-    private IRSUserDao IRSUserDAO;
+    private IRSUserDao rsUserDAO;
+    private IRSActivityTypeDao rsActivityTypeDao;
+    private IRSActivityDao rsActivityDao;
 
     public DataSource(ConnectionSource connectionSource) {
         this.connectionSource = connectionSource;
@@ -25,16 +27,41 @@ public class DataSource {
     }
 
     public IRSUserDao getIRSUserDAO() throws DataSourceException {
-        if (IRSUserDAO == null) {
+        if (rsUserDAO == null) {
             try {
-                IRSUserDAO = DaoManager.<IRSUserDao, RsUser>createDao(connectionSource, RsUser.class);
-                if (!IRSUserDAO.isTableExists())
+                rsUserDAO = DaoManager.<IRSUserDao, RsUser>createDao(connectionSource, RsUser.class);
+                if (!rsUserDAO.isTableExists())
                     TableUtils.createTable(connectionSource, RsUser.class);
             } catch (SQLException e) {
                 throw new DataSourceException(e.getLocalizedMessage(), e);
             }
         }
-        return IRSUserDAO;
+        return rsUserDAO;
     }
 
+    public IRSActivityTypeDao getIRSActiveTypeDAO() throws DataSourceException {
+        if (rsActivityTypeDao == null) {
+            try {
+                rsActivityTypeDao = DaoManager.<IRSActivityTypeDao, RsActivityType>createDao(connectionSource, RsActivityType.class);
+                if (!rsActivityTypeDao.isTableExists())
+                    TableUtils.createTable(connectionSource, RsUser.class);
+            } catch (SQLException e) {
+                throw new DataSourceException(e.getLocalizedMessage(), e);
+            }
+        }
+        return rsActivityTypeDao;
+    }
+
+    public IRSActivityDao getIRSActivityDao() throws DataSourceException {
+        if (rsActivityDao == null) {
+            try {
+                rsActivityDao = DaoManager.<IRSActivityDao, RsActivity>createDao(connectionSource, RsActivity.class);
+                if (!rsActivityDao.isTableExists())
+                    TableUtils.createTable(connectionSource, RsUser.class);
+            } catch (SQLException e) {
+                throw new DataSourceException(e.getLocalizedMessage(), e);
+            }
+        }
+        return rsActivityDao;
+    }
 }

@@ -3,48 +3,48 @@ package com.issart.datasource.entity;
 import org.apache.commons.lang3.builder.Builder;
 import org.joda.time.DateTime;
 
-public class RSUserBuilder implements Builder {
+public class RsUserBuilder implements Builder {
     private RsUser rsUser;
 
-    private RSUserBuilder() {
+    private RsUserBuilder() {
         rsUser = new RsUser();
     }
 
-    public static RSUserBuilder create() {
-        return new RSUserBuilder();
+    public static RsUserBuilder create() {
+        return new RsUserBuilder();
     }
 
-    public RSUserBuilder userId(int userId) {
+    public RsUserBuilder userId(int userId) {
         rsUser.id = userId;
         return this;
     }
 
-    public RSUserBuilder userPasswordSalt(String userPasswordSalt) {
+    public RsUserBuilder userPasswordSalt(String userPasswordSalt) {
         rsUser.userPasswordSalt = userPasswordSalt;
         return this;
     }
 
-    public RSUserBuilder userPasswordHash(String userPasswordHash) {
+    public RsUserBuilder userPasswordHash(String userPasswordHash) {
         rsUser.userPasswordHash = userPasswordHash;
         return this;
     }
 
-    public RSUserBuilder userName(String userName) {
+    public RsUserBuilder userName(String userName) {
         rsUser.userName = userName;
         return this;
     }
 
-    public RSUserBuilder userIsAdministrator(boolean userIsAdministrator) {
+    public RsUserBuilder userIsAdministrator(boolean userIsAdministrator) {
         rsUser.userIsAdministrator = userIsAdministrator;
         return this;
     }
 
-    public RSUserBuilder userDismissDate(DateTime userDismissDate) {
+    public RsUserBuilder userDismissDate(DateTime userDismissDate) {
         rsUser.userDismissDate = userDismissDate;
         return this;
     }
 
-    public RSUserBuilder userHireDate(DateTime userHireDate) {
+    public RsUserBuilder userHireDate(DateTime userHireDate) {
         rsUser.userHireDate = userHireDate;
         return this;
     }

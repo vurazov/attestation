@@ -13,17 +13,17 @@ import java.io.Serializable;
  * Created by vurazov on 29.04.2016.
  */
 @DatabaseTable(daoClass = RSActivityTypeDaoImpl.class)
-public class RSActivityType extends  BaseEntity implements Serializable {
-/*
-create table rs_activity_type (
-  activity_type_id serial
- ,activity_type_name text not null
- ,activity_type_default_loyalty_score integer
- ,activity_type_default_expirience_score integer
- ,activity_type_default_communication_score integer
- ,constraint rs_activity_type_pk primary key (activity_type_id)
-);
-* */
+public class RsActivityType extends  BaseEntity implements Serializable {
+    /*
+    create table rs_activity_type (
+      activity_type_id serial
+     ,activity_type_name text not null
+     ,activity_type_default_loyalty_score integer
+     ,activity_type_default_expirience_score integer
+     ,activity_type_default_communication_score integer
+     ,constraint rs_activity_type_pk primary key (activity_type_id)
+    );
+    * */
     @DatabaseField(generatedId = true)
     int id;
 
@@ -53,6 +53,9 @@ create table rs_activity_type (
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Integer getActivityTypeDefaultLoyaltyScore() {
         return activityTypeDefaultLoyaltyScore;

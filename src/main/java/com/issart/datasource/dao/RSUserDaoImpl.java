@@ -8,8 +8,10 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
+import org.joda.time.DateTime;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 public class RSUserDaoImpl extends BaseDaoImpl<RsUser, Integer> implements IRSUserDao {
@@ -47,6 +49,7 @@ public class RSUserDaoImpl extends BaseDaoImpl<RsUser, Integer> implements IRSUs
         }
     }
 
+    @Override
     public Optional<RsUser> getUserByUsername(String username) throws DataSourceException {
         try {
             return Optional.ofNullable(
@@ -78,6 +81,17 @@ public class RSUserDaoImpl extends BaseDaoImpl<RsUser, Integer> implements IRSUs
             updateBuilder.updateColumnValue("userIsAdministrator", rsUser.IsAdministrator());
             updateBuilder.where().idEq(rsUser.getId());
             updateBuilder.update();
+        } catch (SQLException e) {
+            throw new DataSourceException(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public Optional<List<RsUser>> getUnDismissedUsers() throws DataSourceException {
+        try {
+            return Optional.ofNullable(
+                    getQueryBuilder().where().gt("userDismissDate", new DateTime(0)).query()
+            );
         } catch (SQLException e) {
             throw new DataSourceException(e.getLocalizedMessage());
         }
