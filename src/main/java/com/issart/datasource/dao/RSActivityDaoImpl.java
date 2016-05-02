@@ -77,25 +77,59 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
     }
 
     @Override
-    public List<RsActivity> getScoresRSActivitiesByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException {
+    public List<RsActivity> getTotalScoresTypeByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException {
         GenericRawResults<RsActivity> aRsActivities = null;
         List<RsActivity> rsActivities = new ArrayList<>();
         try {
-            aRsActivities = queryRaw(MessageFormat.format(" SELECT rsActivityType, rsActivityUser," +
+            aRsActivities = queryRaw(MessageFormat.format(" SELECT rsActivityUser," +
                             "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
                             "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
                             "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
                             " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NOT NULL" +
                             "    AND rsActivityDate >= {1} AND rsActivityDate <= {2}" +
-                            " GROUP BY rsActivityType" +
+                            " GROUP BY rsActivityUser" +
                             " UNION ALL " +
-                            " SELECT rsActivityType, rsActivityUser," +
+                            " SELECT rsActivityUser," +
                             "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
                             "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
                             "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
                             " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NULL" +
                             "    AND rsActivityDate >= {1} AND rsActivityDate <= {2}" +
-                            " GROUP BY rsActivityType"
+                            " GROUP BY rsActivityUser"
+                    , entry.getId(), startDateTime, endDateTime)
+                    , new RsActivityMapper());
+            rsActivities.addAll(aRsActivities.getResults());
+        } catch (SQLException e) {
+            throw new DataSourceException(e.getLocalizedMessage());
+        } finally {
+            closeQuietly(aRsActivities);
+        }
+        return rsActivities;
+    }
+
+    @Override
+    public List<RsActivity> getTotalActivityTypeByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException {
+        GenericRawResults<RsActivity> aRsActivities = null;
+        List<RsActivity> rsActivities = new ArrayList<>();
+        try {
+            aRsActivities = queryRaw(MessageFormat.format(
+                            " SELECT RsActivityType.activityTypeName, Total.rsActivityTypeLoyaltyScore, Total.rsActivityTypeExpirienceScore, Total.rsActivityTypeCommunicationScore " +
+                            " FROM RsActivityType INNER JOIN " +
+                            " (SELECT rsActivityType_ID, " +
+                            "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
+                            "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
+                            "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
+                            " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NOT NULL" +
+                            "    AND rsActivityDate >= {1} AND rsActivityDate <= {2}" +
+                            " GROUP BY rsActivityType_ID" +
+                            " UNION ALL " +
+                            " SELECT rsActivityType_ID," +
+                            "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
+                            "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
+                            "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
+                            " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NULL" +
+                            "    AND rsActivityDate >= {1} AND rsActivityDate <= {2}" +
+                            " GROUP BY rsActivityType_ID) Total ON RsActivityType.ID = Total.rsActivityType_ID"
                     , entry.getId(), startDateTime, endDateTime)
                     , new RsActivityMapper());
             rsActivities.addAll(aRsActivities.getResults());
@@ -121,7 +155,7 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
     public Optional<List<RsActivity>> getRSActivitiesByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException {
         try {
             return Optional.ofNullable(
-                    getQueryBuilder().where().eq("rsuser", entry)
+                    getQueryBuilder().where().eq("rsUser_ID", entry)
                             .ge("rsActivityDate", startDateTime)
                             .and().le("rsActivityDate", endDateTime)
                             .query()

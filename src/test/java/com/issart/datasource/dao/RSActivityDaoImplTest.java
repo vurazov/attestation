@@ -2,10 +2,7 @@ package com.issart.datasource.dao;
 
 import com.issart.context.ApplicationContext;
 import com.issart.datasource.DataSource;
-import com.issart.datasource.entity.RsActivityType;
-import com.issart.datasource.entity.RsActivityTypeBuilder;
-import com.issart.datasource.entity.RsUserBuilder;
-import com.issart.datasource.entity.RsUser;
+import com.issart.datasource.entity.*;
 import com.issart.exception.DataSourceException;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.io.FileUtils;
@@ -25,7 +22,7 @@ public class RSActivityDaoImplTest {
     protected ApplicationContext applicationContext;
 
 /*
-    List<RsActivity> getScoresRSActivitiesByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
+    List<RsActivity> getTotalScoresTypeByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
 
     Optional<List<RsActivity>> getRSActivitiesByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
 
@@ -77,9 +74,74 @@ public class RSActivityDaoImplTest {
                 .activityTypeDefaultExpirienceScore(3)
                 .activityTypeDefaultLoyaltyScore(4)
                 .build();
-        rsActivityType2 = dataSource.getIRSActiveTypeDAO().createActivityType(rsActivityType1).get();
+        rsActivityType2 = dataSource.getIRSActiveTypeDAO().createActivityType(rsActivityType2).get();
         assertEquals(dataSource.getIRSActiveTypeDAO().getListActivityType().get().size(), 2);
 
+        dataSource.getIRSActivityDao().createActivity(RsActivityBuilder.create()
+                .rsActivityType(rsActivityType1)
+                .rsActivityUser(rsUser1)
+                .rsCreatedByUser(rsUser2)
+                .rsActivityDate(DateTime.parse("2016-05-01"))
+                .rsActivityTypeCommunicationScore(1)
+                .rsActivityTypeExpirienceScore(2)
+                .rsActivityTypeLoyaltyScore(3)
+                .build());
+        dataSource.getIRSActivityDao().createActivity(RsActivityBuilder.create()
+                .rsActivityType(rsActivityType2)
+                .rsActivityUser(rsUser1)
+                .rsApprovedByUser(rsUser2)
+                .rsCreatedByUser(rsUser2)
+                .rsActivityDate(DateTime.parse("2016-05-01"))
+                .rsActivityTypeCommunicationScore(1)
+                .rsActivityTypeExpirienceScore(2)
+                .rsActivityTypeLoyaltyScore(3)
+                .build());
+        dataSource.getIRSActivityDao().createActivity(RsActivityBuilder.create()
+                .rsActivityType(rsActivityType2)
+                .rsActivityUser(rsUser1)
+                .rsApprovedByUser(rsUser2)
+                .rsCreatedByUser(rsUser2)
+                .rsActivityDate(DateTime.parse("2016-05-01"))
+                .rsActivityTypeCommunicationScore(3)
+                .rsActivityTypeExpirienceScore(4)
+                .rsActivityTypeLoyaltyScore(5)
+                .build());
+    //----------------------------------------------------------------------------------
+        dataSource.getIRSActivityDao().createActivity(RsActivityBuilder.create()
+                .rsActivityType(rsActivityType1)
+                .rsActivityUser(rsUser2)
+                .rsCreatedByUser(rsUser1)
+                .rsActivityDate(DateTime.parse("2016-05-02"))
+                .rsActivityTypeCommunicationScore(1)
+                .rsActivityTypeExpirienceScore(2)
+                .rsActivityTypeLoyaltyScore(3)
+                .build());
+        dataSource.getIRSActivityDao().createActivity(RsActivityBuilder.create()
+                .rsActivityType(rsActivityType2)
+                .rsActivityUser(rsUser2)
+                .rsApprovedByUser(rsUser1)
+                .rsCreatedByUser(rsUser1)
+                .rsActivityDate(DateTime.parse("2016-05-02"))
+                .rsActivityTypeCommunicationScore(1)
+                .rsActivityTypeExpirienceScore(2)
+                .rsActivityTypeLoyaltyScore(3)
+                .build());
+        Optional<List<RsActivity>> activities1 = dataSource.getIRSActivityDao()
+                .getRSActivitiesByUserForPeriod(rsUser1, DateTime.parse("2016-01-01"), DateTime.parse("2016-05-01"));
+        assertTrue(activities1.isPresent());
+        assertEquals(activities1.get().size(), 3);
+
+        Optional<List<RsActivity>> activities2 = dataSource.getIRSActivityDao()
+                .getRSActivitiesByUserForPeriod(rsUser2, DateTime.parse("2016-01-01"), DateTime.parse("2016-05-02"));
+        assertTrue(activities2.isPresent());
+        assertEquals(activities2.get().size(), 2);
+
+        List<RsActivity> rsActivities1 = dataSource.getIRSActivityDao().getTotalScoresTypeByUserForPeriod(rsUser1, DateTime.parse("2016-01-01"), DateTime.parse("2016-05-01"));
+        assertEquals(rsActivities1.size(), 2);
+        List<RsActivity> rsActivities2 = dataSource.getIRSActivityDao().getTotalScoresTypeByUserForPeriod(rsUser2, DateTime.parse("2016-01-01"), DateTime.parse("2016-05-02"));
+        assertEquals(rsActivities2.size(), 2);
+        List<RsActivity> rsActivities3 = dataSource.getIRSActivityDao().getTotalScoresTypeByUserForPeriod(rsUser1, DateTime.parse("2016-01-01"), DateTime.parse("2016-05-01"));
+        assertEquals(rsActivities3.size(), 2);
     }
 
     @Before

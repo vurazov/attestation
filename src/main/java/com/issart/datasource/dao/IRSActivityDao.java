@@ -16,7 +16,9 @@ public interface IRSActivityDao extends Dao<RsActivity, Integer> {
 
     Optional<RsActivity> find(RsActivity entry) throws DataSourceException;
 
-    List<RsActivity> getScoresRSActivitiesByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
+    List<RsActivity> getTotalScoresTypeByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
+
+    List<RsActivity> getTotalActivityTypeByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
 
     Optional<List<RsActivity>> getRSActivitiesByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
 

@@ -23,7 +23,7 @@ public class RsActivityBuilder implements Builder {
         return this;
     }
 
-    public RsActivityBuilder activityDate(DateTime activityDate) {
+    public RsActivityBuilder rsActivityDate(DateTime activityDate) {
         rsActivity.rsActivityDate = activityDate;
         return this;
     }
