@@ -134,6 +134,9 @@ public class RSActivityDaoImplTest {
         assertEquals(rsActivities2.size(), 2);
         List<RsActivity> rsActivities3 = dataSource.getIRSActivityDao().getTotalScoresTypeByUserForPeriod(rsUser1, DateTime.parse("2016-01-01"), DateTime.parse("2016-05-01"));
         assertEquals(rsActivities3.size(), 2);
+        List<RsActivity> rsActivities4 = dataSource.getIRSActivityDao().getTotalActivityTypeByUserForPeriod(rsUser1, DateTime.parse("2016-01-01"), DateTime.parse("2016-05-01"));
+        assertEquals(rsActivities4.size(), 2);
+
     }
 
     @Before

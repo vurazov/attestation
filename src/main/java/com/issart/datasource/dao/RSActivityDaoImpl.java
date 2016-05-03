@@ -117,9 +117,7 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
         List<RsActivity> rsActivities = new ArrayList<>();
         try {
             aRsActivities = queryRaw(MessageFormat.format(
-                            " SELECT RsActivityType.activityTypeName, Total.rsActivityTypeLoyaltyScore, Total.rsActivityTypeExpirienceScore, Total.rsActivityTypeCommunicationScore " +
-                            " FROM RsActivityType INNER JOIN " +
-                            " (SELECT rsActivityType_ID, " +
+                            " SELECT rsActivityType_ID, " +
                             "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
                             "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
                             "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
@@ -135,7 +133,7 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
                             "    FROM RsActivity "+
                             " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NULL" +
                             "    AND rsActivityDate >= {1,number,#} AND rsActivityDate <= {2,number,#}" +
-                            " GROUP BY rsActivityType_ID) Total ON RsActivityType.ID = Total.rsActivityType_ID"
+                            " GROUP BY rsActivityType_ID"
                     , entry.getId(), startDateTime.getMillis(), endDateTime.getMillis())
                     , new RsActivityMapper());
             rsActivities.addAll(aRsActivities.getResults());
@@ -176,7 +174,6 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
         @Override
         public RsActivity mapRow(String[] columnNames, String[] resultColumns) throws SQLException {
         RsActivity rsActivity = new RsActivity();
-
         for (int i = 0; i < columnNames.length; i++) {
             if (StringUtils.equalsIgnoreCase(columnNames[i], "ID")) {
                 if(StringUtils.isNotBlank(resultColumns[i]))
@@ -200,23 +197,23 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
                 if (StringUtils.isNotBlank(resultColumns[i])) {
                     RsUser rsUser = new RsUser();
                     rsUser.setId(Integer.parseInt(resultColumns[i]));
-                    rsActivity.setRsActivityUser(rsUser);
+                    rsActivity.setRsCreatedByUser(rsUser);
                 }
             } else if (StringUtils.equalsIgnoreCase(columnNames[i], "rsApprovedByUser_ID")) {
                 if (StringUtils.isNotBlank(resultColumns[i])) {
                     RsUser rsUser = new RsUser();
                     rsUser.setId(Integer.parseInt(resultColumns[i]));
-                    rsActivity.setRsActivityUser(rsUser);
+                    rsActivity.setRsApprovedByUser(rsUser);
                 }
-            } if (StringUtils.equalsIgnoreCase(columnNames[i], "rsActivityTypeLoyaltyScore")) {
+            } else if (StringUtils.equalsIgnoreCase(columnNames[i], "rsActivityTypeLoyaltyScore")) {
                 if(StringUtils.isNotBlank(resultColumns[i]))
-                    rsActivity.setId(Integer.parseInt(resultColumns[i]));
-            } if (StringUtils.equalsIgnoreCase(columnNames[i], "rsActivityTypeExpirienceScore")) {
+                    rsActivity.setRsActivityTypeLoyaltyScore(Integer.parseInt(resultColumns[i]));
+            } else if (StringUtils.equalsIgnoreCase(columnNames[i], "rsActivityTypeExpirienceScore")) {
                 if(StringUtils.isNotBlank(resultColumns[i]))
-                    rsActivity.setId(Integer.parseInt(resultColumns[i]));
-            } if (StringUtils.equalsIgnoreCase(columnNames[i], "rsActivityTypeCommunicationScore")) {
+                    rsActivity.setRsActivityTypeExpirienceScore(Integer.parseInt(resultColumns[i]));
+            } else if (StringUtils.equalsIgnoreCase(columnNames[i], "rsActivityTypeCommunicationScore")) {
                 if(StringUtils.isNotBlank(resultColumns[i]))
-                    rsActivity.setId(Integer.parseInt(resultColumns[i]));
+                    rsActivity.setRsActivityTypeCommunicationScore(Integer.parseInt(resultColumns[i]));
             }
         }
         return rsActivity;
