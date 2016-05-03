@@ -22,7 +22,7 @@ public class RSActivityTypeDaoImpl extends BaseDaoImpl<RsActivityType, Integer> 
     }
 
     private QueryBuilder<RsActivityType, Integer> getQueryBuilder() {
-        return queryBuilder().selectColumns("activityTypeId", "activityTypeName",
+        return queryBuilder().selectColumns("id", "activityTypeName",
             "activityTypeDefaultLoyaltyScore", "activityTypeDefaultExpirienceScore",
             "activityTypeDefaultCommunicationScore");
     }

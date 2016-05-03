@@ -16,7 +16,7 @@ public class RsActivityTypeBuilder implements Builder {
         return new RsActivityTypeBuilder();
     }
 
-    public RsActivityTypeBuilder rsActivityTypeId(int rsActivityTypeId) {
+    public RsActivityTypeBuilder rsActivityTypeId(Integer rsActivityTypeId) {
         rsActivityType.id = rsActivityTypeId;
         return this;
     }

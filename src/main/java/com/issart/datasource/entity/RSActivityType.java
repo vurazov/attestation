@@ -31,13 +31,13 @@ public class RsActivityType extends  BaseEntity implements Serializable {
     String activityTypeName;
 
     @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
-    Integer activityTypeDefaultLoyaltyScore;
+    int activityTypeDefaultLoyaltyScore;
 
     @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
-    Integer activityTypeDefaultExpirienceScore;
+    int activityTypeDefaultExpirienceScore;
 
     @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
-    Integer activityTypeDefaultCommunicationScore;
+    int activityTypeDefaultCommunicationScore;
 
 
     public String getActivityTypeName() {
@@ -61,7 +61,7 @@ public class RsActivityType extends  BaseEntity implements Serializable {
         return activityTypeDefaultLoyaltyScore;
     }
 
-    public void setActivityTypeDefaultLoyaltyScore(Integer activityTypeDefaultLoyaltyScore) {
+    public void setActivityTypeDefaultLoyaltyScore(int activityTypeDefaultLoyaltyScore) {
         this.activityTypeDefaultLoyaltyScore = activityTypeDefaultLoyaltyScore;
     }
 
@@ -69,7 +69,7 @@ public class RsActivityType extends  BaseEntity implements Serializable {
         return activityTypeDefaultExpirienceScore;
     }
 
-    public void setActivityTypeDefaultExpirienceScore(Integer activityTypeDefaultExpirienceScore) {
+    public void setActivityTypeDefaultExpirienceScore(int activityTypeDefaultExpirienceScore) {
         this.activityTypeDefaultExpirienceScore = activityTypeDefaultExpirienceScore;
     }
 
@@ -77,7 +77,7 @@ public class RsActivityType extends  BaseEntity implements Serializable {
         return activityTypeDefaultCommunicationScore;
     }
 
-    public void setActivityTypeDefaultCommunicationScore(Integer activityTypeDefaultCommunicationScore) {
+    public void setActivityTypeDefaultCommunicationScore(int activityTypeDefaultCommunicationScore) {
         this.activityTypeDefaultCommunicationScore = activityTypeDefaultCommunicationScore;
     }
 

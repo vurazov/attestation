@@ -21,21 +21,8 @@ public class RSActivityDaoImplTest {
     protected DataSource dataSource;
     protected ApplicationContext applicationContext;
 
-/*
-    List<RsActivity> getTotalScoresTypeByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
-
-    Optional<List<RsActivity>> getRSActivitiesByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException;
-
-* */
-
     @Test
-    public void testRSActivitiesByUserForPeriod() {
-
-
-    }
-
-    @Test
-    public void testScoresRSActivitiesByUserForPeriod() throws DataSourceException {
+    public void testScoresRSActivitiesByUserForPeriod() throws Exception {
         RsUser rsUser1 = RsUserBuilder.create()
                 .userId(-1)
                 .userName("test")
@@ -48,9 +35,9 @@ public class RSActivityDaoImplTest {
 
         RsUser rsUser2 = RsUserBuilder.create()
                 .userId(-1)
-                .userName("test")
-                .userPasswordHash("test")
-                .userPasswordSalt("test")
+                .userName("test1")
+                .userPasswordHash("test1")
+                .userPasswordSalt("test1")
                 .userHireDate(DateTime.now())
                 .userDismissDate(new DateTime(0))
                 .userIsAdministrator(true)
@@ -58,6 +45,7 @@ public class RSActivityDaoImplTest {
 
         rsUser1 = dataSource.getIRSUserDAO().createUser(rsUser1).get();
         rsUser2 = dataSource.getIRSUserDAO().createUser(rsUser2).get();
+        assertEquals(dataSource.getIRSUserDAO().queryForAll().size(), 2);
 
         RsActivityType rsActivityType1 = RsActivityTypeBuilder.create()
                 .rsActivityTypeId(-1)
@@ -96,6 +84,7 @@ public class RSActivityDaoImplTest {
                 .rsActivityTypeExpirienceScore(2)
                 .rsActivityTypeLoyaltyScore(3)
                 .build());
+
         dataSource.getIRSActivityDao().createActivity(RsActivityBuilder.create()
                 .rsActivityType(rsActivityType2)
                 .rsActivityUser(rsUser1)
@@ -106,7 +95,7 @@ public class RSActivityDaoImplTest {
                 .rsActivityTypeExpirienceScore(4)
                 .rsActivityTypeLoyaltyScore(5)
                 .build());
-    //----------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------
         dataSource.getIRSActivityDao().createActivity(RsActivityBuilder.create()
                 .rsActivityType(rsActivityType1)
                 .rsActivityUser(rsUser2)
@@ -126,6 +115,9 @@ public class RSActivityDaoImplTest {
                 .rsActivityTypeExpirienceScore(2)
                 .rsActivityTypeLoyaltyScore(3)
                 .build());
+
+        assertEquals(dataSource.getIRSActivityDao().queryForAll().size(), 5);
+
         Optional<List<RsActivity>> activities1 = dataSource.getIRSActivityDao()
                 .getRSActivitiesByUserForPeriod(rsUser1, DateTime.parse("2016-01-01"), DateTime.parse("2016-05-01"));
         assertTrue(activities1.isPresent());

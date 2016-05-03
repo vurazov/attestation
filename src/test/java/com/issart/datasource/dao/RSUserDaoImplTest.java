@@ -54,6 +54,7 @@ public class RSUserDaoImplTest {
         Optional<List<RsUser>> users = dataSource.getIRSUserDAO().getUnDismissedUsers();
         assertTrue(users.isPresent());
         assertEquals(users.get().size(), 1);
+        assertEquals(dataSource.getIRSUserDAO().queryForAll().size(), 2);
     }
 
     @Before

@@ -44,7 +44,7 @@ public class DataSource {
             try {
                 rsActivityTypeDao = DaoManager.<IRSActivityTypeDao, RsActivityType>createDao(connectionSource, RsActivityType.class);
                 if (!rsActivityTypeDao.isTableExists())
-                    TableUtils.createTable(connectionSource, RsUser.class);
+                    TableUtils.createTable(connectionSource, RsActivityType.class);
             } catch (SQLException e) {
                 throw new DataSourceException(e.getLocalizedMessage(), e);
             }
@@ -57,7 +57,7 @@ public class DataSource {
             try {
                 rsActivityDao = DaoManager.<IRSActivityDao, RsActivity>createDao(connectionSource, RsActivity.class);
                 if (!rsActivityDao.isTableExists())
-                    TableUtils.createTable(connectionSource, RsUser.class);
+                    TableUtils.createTable(connectionSource, RsActivity.class);
             } catch (SQLException e) {
                 throw new DataSourceException(e.getLocalizedMessage(), e);
             }

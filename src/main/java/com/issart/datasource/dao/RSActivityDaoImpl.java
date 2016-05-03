@@ -14,7 +14,9 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.CloseableWrappedIterable;
 import com.j256.ormlite.dao.GenericRawResults;
 import com.j256.ormlite.dao.RawRowMapper;
+import com.j256.ormlite.field.SqlType;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.SelectArg;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import org.apache.commons.lang3.StringUtils;
@@ -32,8 +34,8 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
 
     private QueryBuilder<RsActivity, Integer> getQueryBuilder() {
         return queryBuilder().selectColumns("id", "rsActivityDate",
-            "rsActivityUser", "rsCreatedByUser", "rsApprovedByUser",
-            "rsActivityType", "rsActivityTypeLoyaltyScore", "rsActivityTypeExpirienceScore",
+            "rsActivityUser_ID", "rsCreatedByUser_ID", "rsApprovedByUser_ID",
+            "rsActivityType_ID", "rsActivityTypeLoyaltyScore", "rsActivityTypeExpirienceScore",
             "rsActivityTypeCommunicationScore");
     }
 
@@ -81,22 +83,24 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
         GenericRawResults<RsActivity> aRsActivities = null;
         List<RsActivity> rsActivities = new ArrayList<>();
         try {
-            aRsActivities = queryRaw(MessageFormat.format(" SELECT rsActivityUser," +
-                            "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
-                            "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
-                            "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
+            aRsActivities = queryRaw(MessageFormat.format(" SELECT rsActivityUser_ID," +
+                            "    SUM(rsActivityTypeLoyaltyScore) AS rsActivityTypeLoyaltyScore," +
+                            "    SUM(rsActivityTypeExpirienceScore) AS rsActivityTypeExpirienceScore," +
+                            "    SUM(rsActivityTypeCommunicationScore) AS rsActivityTypeCommunicationScore" +
+                            "    FROM RsActivity " +
                             " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NOT NULL" +
-                            "    AND rsActivityDate >= {1} AND rsActivityDate <= {2}" +
-                            " GROUP BY rsActivityUser" +
+                            "    AND rsActivityDate >= {1,number,#} AND rsActivityDate <= {2,number,#}" +
+                            " GROUP BY rsActivityUser_ID" +
                             " UNION ALL " +
-                            " SELECT rsActivityUser," +
-                            "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
-                            "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
-                            "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
+                            " SELECT rsActivityUser_ID," +
+                            "    SUM(rsActivityTypeLoyaltyScore) AS rsActivityTypeLoyaltyScore," +
+                            "    SUM(rsActivityTypeExpirienceScore) AS rsActivityTypeExpirienceScore," +
+                            "    SUM(rsActivityTypeCommunicationScore) AS rsActivityTypeCommunicationScore" +
+                            "    FROM RsActivity " +
                             " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NULL" +
-                            "    AND rsActivityDate >= {1} AND rsActivityDate <= {2}" +
-                            " GROUP BY rsActivityUser"
-                    , entry.getId(), startDateTime, endDateTime)
+                            "    AND rsActivityDate >= {1,number,#} AND rsActivityDate <= {2,number,#}" +
+                            " GROUP BY rsActivityUser_ID"
+                    , entry.getId(), startDateTime.getMillis(), endDateTime.getMillis())
                     , new RsActivityMapper());
             rsActivities.addAll(aRsActivities.getResults());
         } catch (SQLException e) {
@@ -119,18 +123,20 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
                             "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
                             "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
                             "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
+                            "    FROM RsActivity "+
                             " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NOT NULL" +
-                            "    AND rsActivityDate >= {1} AND rsActivityDate <= {2}" +
+                            "    AND rsActivityDate >= {1,number,#} AND rsActivityDate <= {2,number,#}" +
                             " GROUP BY rsActivityType_ID" +
                             " UNION ALL " +
                             " SELECT rsActivityType_ID," +
                             "    SUM(rsActivityTypeLoyaltyScore) rsActivityTypeLoyaltyScore," +
                             "    SUM(rsActivityTypeExpirienceScore) rsActivityTypeExpirienceScore," +
                             "    SUM(rsActivityTypeCommunicationScore) rsActivityTypeCommunicationScore" +
+                            "    FROM RsActivity "+
                             " WHERE rsActivityUser_ID = {0} AND  rsApprovedByUser_ID IS NULL" +
-                            "    AND rsActivityDate >= {1} AND rsActivityDate <= {2}" +
+                            "    AND rsActivityDate >= {1,number,#} AND rsActivityDate <= {2,number,#}" +
                             " GROUP BY rsActivityType_ID) Total ON RsActivityType.ID = Total.rsActivityType_ID"
-                    , entry.getId(), startDateTime, endDateTime)
+                    , entry.getId(), startDateTime.getMillis(), endDateTime.getMillis())
                     , new RsActivityMapper());
             rsActivities.addAll(aRsActivities.getResults());
         } catch (SQLException e) {
@@ -155,8 +161,8 @@ public class RSActivityDaoImpl extends BaseDaoImpl<RsActivity, Integer> implemen
     public Optional<List<RsActivity>> getRSActivitiesByUserForPeriod(RsUser entry, DateTime startDateTime, DateTime endDateTime) throws DataSourceException {
         try {
             return Optional.ofNullable(
-                    getQueryBuilder().where().eq("rsUser_ID", entry)
-                            .ge("rsActivityDate", startDateTime)
+                    getQueryBuilder().where().eq("rsActivityUser_ID", entry)
+                            .and().ge("rsActivityDate", startDateTime)
                             .and().le("rsActivityDate", endDateTime)
                             .query()
 

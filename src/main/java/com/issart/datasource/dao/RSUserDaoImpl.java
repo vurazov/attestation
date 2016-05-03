@@ -21,7 +21,7 @@ public class RSUserDaoImpl extends BaseDaoImpl<RsUser, Integer> implements IRSUs
     }
 
     private QueryBuilder<RsUser, Integer> getQueryBuilder() {
-        return queryBuilder().selectColumns("userId", "userName", "userHireDate", "userDismissDate",
+        return queryBuilder().selectColumns("id", "userName", "userHireDate", "userDismissDate",
             "userPasswordHash", "userPasswordSalt", "userIsAdministrator");
     }
 
