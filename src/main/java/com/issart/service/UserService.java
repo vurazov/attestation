@@ -79,6 +79,16 @@ public class UserService extends AbstractService {
         dataSource.getIRSUserDAO().modify(user.get());
     }
 
+    public boolean login(String userName, String userPassword) throws ServiceException, DataSourceException {
+        Optional<RsUser> user  = getUser(userName, userPassword);
+        if(user.isPresent()){
+            if(!applicationContext.hasSession(UUID.nameUUIDFromBytes(userName.getBytes()))){
+                applicationContext.putSession(UUID.nameUUIDFromBytes(userName.getBytes()), user.get());
+            }
+            return true;
+        }
+        return false;
+    }
     public void logout(String userName) {
         if (StringUtils.isNoneBlank(userName)) {
             applicationContext.removeSession(UUID.nameUUIDFromBytes(userName.getBytes()));
@@ -99,13 +109,9 @@ public class UserService extends AbstractService {
             throw new InvalidCredentialsException("Username and/or password are incorrect.");
         }
         if (user.isPresent()) {
-            if(!applicationContext.hasSession(UUID.nameUUIDFromBytes(userName.getBytes()))){
-                applicationContext.putSession(UUID.nameUUIDFromBytes(userName.getBytes()), user.get());
-            }
             return user;
         } else {
             throw new InvalidCredentialsException("Username and/or password are incorrect.");
         }
     }
-
 }

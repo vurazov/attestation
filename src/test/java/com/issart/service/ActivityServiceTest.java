@@ -68,9 +68,9 @@ public class ActivityServiceTest {
     RsUser rsUser3;
     @Before
     public void setUp() throws Exception {
-        rsUser1 = userService.getUser("fancyUserAdmin", "fancyPassword").get();
-        rsUser2 = userService.getUser("fancyUser", "fancyPassword").get();
-        rsUser3 = userService.createUser("fancyUser1", "fancyPassword", false).get();
+        rsUser1 = userService.login("fancyUserAdmin", "fancyPassword");
+        rsUser2 = userService.login("fancyUser", "fancyPassword");
+        rsUser3 = userService.login("fancyUser1", "fancyPassword", false);
     }
 
     @Test(expected = InvalidParameterException.class)
