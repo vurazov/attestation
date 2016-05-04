@@ -1,6 +1,9 @@
 package com.issart.context;
 
+import com.issart.datasource.entity.RsUser;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
+import org.apache.commons.lang3.concurrent.ConcurrentUtils;
+import org.h2.mvstore.ConcurrentArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.configuration.Configuration;
@@ -8,13 +11,18 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ApplicationContext implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(ApplicationContext.class);
     private JdbcPooledConnectionSource jdbcConnectionSource;
-    private static volatile PropertiesConfiguration configuration;
+    private volatile PropertiesConfiguration configuration;
+    private volatile ConcurrentHashMap<UUID, RsUser> sessions = new ConcurrentHashMap<UUID, RsUser>();
 
     @Override
     public void close() throws Exception {
@@ -62,5 +70,17 @@ public class ApplicationContext implements AutoCloseable {
             }
         }
         return jdbcConnectionSource;
+    }
+
+    public void removeSession(UUID uuid) {
+        sessions.remove(uuid);
+    }
+
+    public void putSession(UUID uuid, RsUser user) {
+        sessions.put(uuid, user);
+    }
+
+    public boolean hasSession(UUID uuid) {
+        return sessions.containsKey(uuid);
     }
 }

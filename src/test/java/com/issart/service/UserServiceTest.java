@@ -51,30 +51,4 @@ public class UserServiceTest {
         assertFalse(userAdmin.get().IsAdministrator());
         assertTrue(userAdmin.get().getUserDismissDate().equals(dissmiss));
     }
-/*
-    @Test
-    public void testCreateUser() throws Exception {
-        assertTrue(userService.createUser("fancyUserAdmin", "fancyPassword", true).isPresent());
-        assertTrue(userService.createUser("fancyUser", "fancyPassword", false).isPresent());
-    }
-
-    @Test
-    public void testGetUser() throws Exception {
-        Optional<RsUser> userAdmin = userService.getUser("fancyUserAdmin", "fancyPassword");
-        assertTrue(userAdmin.isPresent());
-        assertTrue(userAdmin.get().IsAdministrator());
-        Optional<RsUser> user = userService.getUser("fancyUser", "fancyPassword");
-        assertTrue(user.isPresent());
-        assertFalse(user.get().IsAdministrator());
-    }
-
-    @Test
-    public void testGetUpdateUser() throws Exception {
-        Optional<RsUser> userAdmin = userService.getUser("fancyUserAdmin", "fancyPassword");
-        assertTrue(userAdmin.isPresent());
-        assertTrue(userAdmin.get().IsAdministrator());
-        userService.updateUser(userAdmin.get().getUserName(), "fancyPassword", false);
-        userAdmin = userService.getUser(userAdmin.get().getUserName(), "fancyPassword");
-        assertFalse(userAdmin.get().IsAdministrator());
-    }*/
 }

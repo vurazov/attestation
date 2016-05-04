@@ -2,6 +2,8 @@ package com.issart.service;
 
 import com.issart.context.ApplicationContext;
 import com.issart.datasource.DataSource;
+import com.issart.datasource.entity.RsActivity;
+import com.issart.datasource.entity.RsActivityType;
 import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

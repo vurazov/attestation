@@ -56,14 +56,14 @@ create table rs_activity (
     @DatabaseField(foreignColumnName = "id", foreign = true, canBeNull = true)
     RsActivityType rsActivityType;
 
-    @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
-    int rsActivityTypeLoyaltyScore;
+    @DatabaseField(canBeNull = true)
+    Integer rsActivityTypeLoyaltyScore;
 
-    @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
-    int rsActivityTypeExpirienceScore;
+    @DatabaseField(canBeNull = true)
+    Integer rsActivityTypeExpirienceScore;
 
-    @DatabaseField(dataType = DataType.INTEGER, canBeNull = true)
-    int rsActivityTypeCommunicationScore;
+    @DatabaseField(canBeNull = true)
+    Integer rsActivityTypeCommunicationScore;
 
     public DateTime getRsActivityDate() {
         return rsActivityDate;
@@ -109,7 +109,7 @@ create table rs_activity (
         return rsActivityTypeLoyaltyScore;
     }
 
-    public void setRsActivityTypeLoyaltyScore(int rsActivityTypeLoyaltyScore) {
+    public void setRsActivityTypeLoyaltyScore(Integer rsActivityTypeLoyaltyScore) {
         this.rsActivityTypeLoyaltyScore = rsActivityTypeLoyaltyScore;
     }
 
@@ -117,7 +117,7 @@ create table rs_activity (
         return rsActivityTypeExpirienceScore;
     }
 
-    public void setRsActivityTypeExpirienceScore(int rsActivityTypeExpirienceScore) {
+    public void setRsActivityTypeExpirienceScore(Integer rsActivityTypeExpirienceScore) {
         this.rsActivityTypeExpirienceScore = rsActivityTypeExpirienceScore;
     }
 
@@ -125,7 +125,7 @@ create table rs_activity (
         return rsActivityTypeCommunicationScore;
     }
 
-    public void setRsActivityTypeCommunicationScore(int rsActivityTypeCommunicationScore) {
+    public void setRsActivityTypeCommunicationScore(Integer rsActivityTypeCommunicationScore) {
         this.rsActivityTypeCommunicationScore = rsActivityTypeCommunicationScore;
     }
 

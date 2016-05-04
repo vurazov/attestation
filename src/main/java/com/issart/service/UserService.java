@@ -1,6 +1,8 @@
 package com.issart.service;
 
 import java.util.Optional;
+import java.util.UUID;
+
 import com.google.common.base.Strings;
 import com.issart.datasource.entity.RsUserBuilder;
 import com.issart.datasource.entity.RsUser;
@@ -77,6 +79,12 @@ public class UserService extends AbstractService {
         dataSource.getIRSUserDAO().modify(user.get());
     }
 
+    public void logout(String userName) {
+        if (StringUtils.isNoneBlank(userName)) {
+            applicationContext.removeSession(UUID.nameUUIDFromBytes(userName.getBytes()));
+        }
+    }
+
     public Optional<RsUser> getUser(String userName, String userPassword) throws ServiceException, DataSourceException {
         if (Strings.isNullOrEmpty(userName)) {
             throw new InvalidCredentialsException("Username or email is empty.");
@@ -91,6 +99,9 @@ public class UserService extends AbstractService {
             throw new InvalidCredentialsException("Username and/or password are incorrect.");
         }
         if (user.isPresent()) {
+            if(!applicationContext.hasSession(UUID.nameUUIDFromBytes(userName.getBytes()))){
+                applicationContext.putSession(UUID.nameUUIDFromBytes(userName.getBytes()), user.get());
+            }
             return user;
         } else {
             throw new InvalidCredentialsException("Username and/or password are incorrect.");

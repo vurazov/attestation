@@ -32,74 +32,8 @@ public class ApplicationService {
                             @QueryParam("admin") String admin,
             @Context HttpServletRequest request) {
 
-       // validateNotNullParameter("userName", login);
-       // validateNotNullParameter("password", password);
 
-      /*
-        String uuid = UUID.randomUUID().toString();
-        try {
-            RsUser rsUser = userStore.getUser(login);
-            if (rsUser == null) {
-                // add new rsUser
-                rsUser = dataSource.getIRSUserDAO().addUser(login, password);
-            } else {
-                // check password and set cookie
-                if (!rsUser.getUserPasswordHash().equals(password)) {
-                    throw new ServiceException(Error.WRONG_PASSWORD, login);
-                }
-            }
-            authorizedUsers.put(uuid, rsUser);
-            return Response.ok()
-                    .Entity(rsUser)
-                    .cookie(new NewCookie("uuid", uuid))
-                    .build();
-        } catch (ServiceException ex) {
-            log.error(ex.getMessage(), ex);
-            return Response.status(ex.getError().code).Entity(ex.getMessage()).build();
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return Response.status(500).Entity(e.getMessage()).build();
-        }*/
         return null;
     }
-    /*
-    try{
 
-    } catch (InvalidParameterException e) {
-            logger.error(e.getError().getMessage(), e);
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getError()).build();
-        } catch (EntityNotFoundException e) {
-            logger.error(e.getError().getMessage(), e);
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getError()).build();
-        } catch (Exception e) {
-            logger.error("Internal Error", e);
-            return Response.status(
-                Response.Status.INTERNAL_SERVER_ERROR).entity(new Error(e.getMessage(), -1)
-            ).build();
-        }
-     }
-    * */
-/*
-    private RsUser getUser(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            throw new ServiceException(Error.USER_IS_NOT_AUTHORIZED);
-        }
-        RsUser rsUser = null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("uuid")) {
-                rsUser = authorizedUsers.get(cookie.getValue());
-            }
-        }
-        if (cookies == null) {
-            throw new ServiceException(Error.USER_IS_NOT_AUTHORIZED);
-        }
-        return rsUser;
-    }
-
-    private void validateNotNullParameter(String paramName, Object paramValue) {
-        if (paramValue == null) {
-            throw new InvalidParameterException(paramName);
-        }
-    }*/
 }
